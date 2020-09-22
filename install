@@ -1,0 +1,28 @@
+#import sys
+
+#dist = sys.argv[1]
+PY2="/usr/lib/python2.7"
+PY3="/usr/lib/python3.8"
+
+if [ "$1" = "" ]
+then
+    echo "using: ./install <file-path> [py-lib]"
+else
+    if [ "$2" = "" ]
+    then
+        cp $1 $PY2/$1
+        cp $1 $PY3/$1
+        echo Copied to: $PY2/$1
+        echo Copied to: $PY3/$1
+    fi
+    if [ "$2" = "2" ]
+    then
+        cp $1 $PY2/$1
+        echo Copied to: $PY2/$1
+    fi
+    if [ "$2" = "3" ]
+    then
+        cp $1 $PY3/$1
+        echo Copied to: $PY3/$1
+    fi
+fi
