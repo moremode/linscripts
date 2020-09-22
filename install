@@ -1,28 +1,46 @@
-#import sys
-
-#dist = sys.argv[1]
+#!/bin/bash
 PY2="/usr/lib/python2.7"
 PY3="/usr/lib/python3.8"
 
 if [ "$1" = "" ]
 then
-    echo "using: ./install <file-path> [py-lib]"
-else
-    if [ "$2" = "" ]
-    then
-        cp $1 $PY2/$1
-        cp $1 $PY3/$1
-        echo Copied to: $PY2/$1
-        echo Copied to: $PY3/$1
-    fi
-    if [ "$2" = "2" ]
-    then
-        cp $1 $PY2/$1
-        echo Copied to: $PY2/$1
-    fi
-    if [ "$2" = "3" ]
-    then
-        cp $1 $PY3/$1
-        echo Copied to: $PY3/$1
-    fi
+    echo "using: ./install <file-path> [py-lib] [ln]"
+	exit 1
 fi
+echo "$1"
+LOC="$1"
+IFS='/' read -ra LOCAL <<< "$1"
+for i in "${LOCAL[@]}"; do
+    LOC="$i"
+done
+if [ "$2" = "" ] || [ "$2" = "23" ] || [ "$2" = "32" ]
+then
+    cp $1 $PY2/$LOC
+	rm $PY3/$LOC
+    ln -s $PY2/$LOC $PY3/$LOC
+	if [ "$3" = "ln" ]
+	then
+		ln -s $PY2/$LOC "$1.ln"
+	fi
+    echo Copied to: $PY2/$1
+    echo Copied to: $PY3/$1
+fi
+if [ "$2" = "2" ]
+then
+    cp $1 $PY2/$LOC
+	if [ "$3" = "ln" ]
+	then
+		ln -s $PY2/$LOC "$1.ln"
+	fi
+    echo Copied to: $PY2/$LOC
+fi
+if [ "$2" = "3" ]
+then
+    cp $1 $PY3/$LOC
+	if [ "$3" = "ln" ]
+	then
+		ln -s $PY3/$LOC "$1.ln"
+	fi
+    echo Copied to: $PY3/$LOC
+fi
+
